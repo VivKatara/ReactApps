@@ -10,7 +10,8 @@ class App extends Component   {
     this.state = {
       board : Array(9).fill(null),  
       player : null,
-      winner : null
+      winner : null,
+      filled : false
     }
   }
 
@@ -43,8 +44,20 @@ class App extends Component   {
       }
     }
   }
+
+  checkFilled() {
+    this.setState({ filled : true })
+    for (let index = 0; index < this.state.board.length; index++) {
+      if (this.state.board[index] === null) {
+        this.setState({filled : false})
+      }
+    }
+    if (this.state.winner) {
+      this.setState({ filled : true})
+    }
+  }
   handleClick(index){
-    if(this.state.player && !this.state.winner) {
+    if(this.state.player && !this.state.winner && !this.state.filled) {
       let newBoard = this.state.board
       if (this.state.board[index] === null) {
         newBoard[index] = this.state.player
@@ -56,6 +69,7 @@ class App extends Component   {
         this.checkWinner()
       }
     }
+    if (!this.state.winner) {this.checkFilled()}
 
   }
 
@@ -76,7 +90,8 @@ class App extends Component   {
     this.setState({
       player: null,
       winner: null,
-      board: Array(9).fill(null)
+      board: Array(9).fill(null),
+      filled: false
     })
   }
   render() {
@@ -88,12 +103,13 @@ class App extends Component   {
           player = {this.state.player} 
           setPlayer ={(e) => this.setPlayer(e)}
           winner = {this.state.winner}
+          filled = {this.state.filled}
         />
         <div className = "board">
           {this.renderBoxes()}
         </div>
 
-        <button disabled ={!this.state.winner} onClick = {() => this.reset()}>
+        <button disabled = {!this.state.winner && !this.state.filled} onClick = {() => this.reset()}>
         Reset</button>
 
       </div>
