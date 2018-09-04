@@ -9,7 +9,7 @@ class App extends Component   {
     super(props)
     this.state = {
       board : Array(9).fill(null),  
-      player : null, 
+      player : null,
       winner : null
     }
   }
